@@ -1,28 +1,35 @@
 import pytest
-# TODO: add necessary import
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from ml.model import train_model, inference, compute_model_metrics
 
-# TODO: implement the first test. Change the function name and input as needed
-def test_one():
+def test_train_model_returns_classifier():
     """
-    # add description for the first test
+    Test that train_model returns a RandomForestClassifier instance.
     """
-    # Your code here
-    pass
+    X = np.array([[1, 0], [0, 1], [1, 1]])
+    y = np.array([0, 1, 0])
+    model = train_model(X, y)
+    assert isinstance(model, RandomForestClassifier)
 
+def test_inference_output_matches_input():
+    """
+    Test that inference returns a prediction array with the correct length.
+    """
+    X = np.array([[1, 0], [0, 1]])
+    y = np.array([0, 1])
+    model = train_model(X, y)
+    preds = inference(model, X)
+    assert isinstance(preds, np.ndarray)
+    assert preds.shape[0] == X.shape[0]
 
-# TODO: implement the second test. Change the function name and input as needed
-def test_two():
+def test_compute_model_metrics_on_known_data():
     """
-    # add description for the second test
+    Test compute_model_metrics for a known set of true/predicted labels.
     """
-    # Your code here
-    pass
-
-
-# TODO: implement the third test. Change the function name and input as needed
-def test_three():
-    """
-    # add description for the third test
-    """
-    # Your code here
-    pass
+    y_true = np.array([1, 0, 1, 1])
+    y_pred = np.array([1, 0, 0, 1])
+    precision, recall, fbeta = compute_model_metrics(y_true, y_pred)
+    assert round(precision, 2) == 1.00
+    assert round(recall, 2) == 0.67
+    assert round(fbeta, 2) == 0.80
